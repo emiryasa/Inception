@@ -1,22 +1,14 @@
 FROM debian:buster
 
-# Install packages
-RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    mariadb-client \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y mariadb-server
 
-# Copy configuration files
-COPY ./srcs/mariadb/my.cnf /etc/mysql/my.cnf
+COPY ./conf/50-server.conf /etc/mysql/mariadb.conf.d/
 
-# Copy scripts
-COPY ./srcs/mariadb/setup.sh /tmp/setup.sh
+COPY ./tools /var/www/
 
-# Expose ports
-EXPOSE 3306
+RUN service mysql start && mysql < /var/www/initial_db.sql && rm -f /var/www/initial_db.sql
 
-# Run setup script
-CMD bash /tmp/setup.sh
+CMD ["mysqld"]
 
 # Run the following command to build the image:
 # docker build -t mariadb .

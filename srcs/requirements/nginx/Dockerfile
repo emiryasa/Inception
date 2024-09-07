@@ -1,29 +1,18 @@
-FROM debian:oldstable
+FROM debian:buster
 
-# Install packages
-RUN apt-get update && apt-get install -y \
-    wget \
-    curl \
-    bash \
-    php \
-    php-cgi \
-    php-mysql \
-    php-fpm \
-    php-pdo \
-    php-gd php-cli \
-    php-mbstring \
-    redis \
-    php-redis \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y nginx openssl
+    
+RUN mkdir /etc/nginx/ssl
 
-# Copy configuration files
-COPY ./srcs/wordpress/tools/wp-config.php /var/www/html/wp-config.php
+COPY ./conf/nginx.conf /etc/nginx/sites-enabled/default
 
-# Copy scripts
-COPY ./srcs/wordpress/setup.sh /tmp/setup.sh
+COPY ./tools/nginx_start.sh /var/www
 
-# Expose ports
-EXPOSE 80
+RUN chmod +x /var/www/nginx_start.sh
+RUN mkdir -p /run/nginx
 
-# Run setup script
-CMD bash /tmp/setup.sh
+ENTRYPOINT ["var/www/nginx_start.sh"]
+
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]

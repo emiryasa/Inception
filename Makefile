@@ -1,15 +1,19 @@
-NAME=Inception
+all: up
 
-all: $(NAME)
+up:
+	docker-compose -f ./srcs/docker-compose.yml up -d
 
-$(NAME):
-	@echo "Building $(NAME)..."
-	@docker build -t $(NAME) .
+down:
+	docker-compose -f ./srcs/docker-compose.yml down
 
-clean:
-	@echo "Cleaning $(NAME)..."
-	@docker rmi $(NAME)
+start:
+	docker-compose -f ./srcs/docker-compose.yml start
 
-fclean: clean
+stop:
+	docker-compose -f ./srcs/docker-compose.yml stop
 
-re: fclean all
+restart:
+	docker-compose -f ./srcs/docker-compose.yml restart
+
+status:
+	docker-compose -f ./srcs/docker-compose.yml ps
