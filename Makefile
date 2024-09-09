@@ -1,19 +1,21 @@
 all: up
 
 up:
-	docker-compose -f ./srcs/docker-compose.yml up -d
+	sudo mkdir -p /home/eyasa/data/mariadb_data
+	sudo mkdir -p /home/eyasa/data/wordpress_data
+	sudo docker-compose -f ./srcs/docker-compose.yml up --build -d
 
 down:
-	docker-compose -f ./srcs/docker-compose.yml down
+	sudo docker-compose -f ./srcs/docker-compose.yml down
 
 start:
-	docker-compose -f ./srcs/docker-compose.yml start
+	sudo docker-compose -f ./srcs/docker-compose.yml start
 
 stop:
-	docker-compose -f ./srcs/docker-compose.yml stop
+	sudo docker-compose -f ./srcs/docker-compose.yml stop
 
 restart:
-	docker-compose -f ./srcs/docker-compose.yml restart
+	sudo docker-compose -f ./srcs/docker-compose.yml restart
 
 status:
-	docker-compose -f ./srcs/docker-compose.yml ps
+	sudo docker-compose -f ./srcs/docker-compose.yml ps
